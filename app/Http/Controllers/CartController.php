@@ -141,6 +141,6 @@ class CartController extends Controller
     public function softDeleteBookFromStore(User $user,Book $book)
     {
         $user->hasRented->find($book->id)->pivot->deleted_at = now();
-        return 
+
     }
 }
