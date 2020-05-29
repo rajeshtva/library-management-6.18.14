@@ -40,3 +40,4 @@ Route::get('/carts', 'CartController@index');
 Route::delete('/carts/delete', 'CartController@destroy');
 Route::post('/checkout', 'CartController@checkOut');
 Route::get('/subscriptions', 'BookController@getSubscription');
+Route::delete('/{user}/softdelete/{book}', 'CartController@softDeleteBookFromStore');
