@@ -19,7 +19,7 @@ class CreatesBookUserPivotTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->float('past_charges');
             $table->float('current_charge');
-            $table->datetime('deleted_at');
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -98,11 +100,18 @@ class CartController extends Controller
 
 
             if ($book_exist_in_database === true) {
-                // dump('inside book_exist_in_database');
+                dump('inside book_exist_in_database');
                 $actual_book = $user->hasRented->find($book->id)->pivot;
 
                 // dump($actual_book->past_charges);
                 // dump($actual_book->current_charge);
+
+                if($actual_book->deleted_at != null)
+                {
+                    $actual_book->deleted_at = null;
+                    $actual_book->updated_at = Carbon::now();
+                    $actual_book->push();
+                }
 
                 $past_charge = $actual_book->past_charges;
                 $current_charge = $actual_book->current_charge;
@@ -115,14 +124,14 @@ class CartController extends Controller
                 ];
 
                 $actual_book->past_charges = $sum;
-                $actual_book->updated_at = now();
-                $actual_book->save();
+                $actual_book->updated_at = Carbon::now()->addDays(20);
+                $actual_book->push();
 
                 // dump($data);
 
-                $allData[$book->id] = $data;
+                // $allData[$book->id] = $data;
             } else {
-                // dump('outside book_exist');
+                dump('outside book_exist');
                 $data = [
                     'past_charges' => $d,
                     'current_charge' => $book->price,
@@ -140,7 +149,8 @@ class CartController extends Controller
 
     public function softDeleteBookFromStore(User $user,Book $book)
     {
-        $user->hasRented->find($book->id)->pivot->deleted_at = now();
-
+        $book = $user->hasRented()->find($book->id)->pivot;
+        $book->deleted_at = Carbon::now()->addDays(20);
+        $book->push();
     }
 }
