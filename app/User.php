@@ -6,18 +6,20 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use LogsActivity;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'user_id'
+        'name', 'email', 'password', 'account'
     ];
 
     /**
@@ -37,6 +39,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    // for activity logs --- all events 
+    protected static $recordEvents =  ['created', 'updated', 'deleted'];
+
+    // this is for fields about which things will be reported.
+    protected static $logAttributes = ['name', 'email', 'password', 'account'];
+
+    // for description 
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "The user has been {$eventName}";
+    }
+
+    // reporting only changed value
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
+    protected static $logName = 'User';
+    
 
     public function setPasswordAttribute($password)
     {

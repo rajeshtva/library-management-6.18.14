@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -41,20 +42,39 @@ class RunTaskEveryWeekOnSunday extends Command
     {
         $allEntries = DB::table('book_user')->get();
 
-        foreach($allEntries as $entry){
+        foreach ($allEntries as $entry) {
             $current_charge = $entry->current_charge;
             $past_charges = $entry->past_charges;
 
             $sum = $current_charge + $past_charges;
 
             $entry->past_charge = $sum;
-            
+
             DB::table('book_user')->where([
                 ['user_id', '=', $entry->user_id],
                 ['book_id', '=', $entry->book_id],
             ])->update([
                 'past_charges' => $sum,
                 'updated_at' => Carbon::now()
+            ]);
+        }
+
+        $users = DB::table('book_user')->select('user_id')->distinct()->get();
+
+        foreach ($users as $user) {
+            $books = DB::table('book_user')->where([
+                ['user_id', '=', $user],
+            ]);
+
+            $sum = 0;
+
+            foreach($books as $book){
+                $charge = $books->past_charges;
+                $sum = $sum + $charge;
+            }
+
+            User::find($user)->update([
+                'account' => $sum,
             ]);
         }
     }
