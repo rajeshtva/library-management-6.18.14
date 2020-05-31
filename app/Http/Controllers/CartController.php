@@ -100,7 +100,7 @@ class CartController extends Controller
 
 
             if ($book_exist_in_database === true) {
-                dump('inside book_exist_in_database');
+                // dump('inside book_exist_in_database');
                 $actual_book = $user->hasRented->find($book->id)->pivot;
 
                 // dump($actual_book->past_charges);
@@ -110,18 +110,23 @@ class CartController extends Controller
                 {
                     $actual_book->deleted_at = null;
                     $actual_book->updated_at = Carbon::now();
+                    $actual_book->past_charges = 0;
+                    $actual_book->current_charge = $book->price;
                     $actual_book->push();
-                }
 
+                    return redirect('/home');
+                }
                 $past_charge = $actual_book->past_charges;
+                
                 $current_charge = $actual_book->current_charge;
                 $sum = $past_charge + $current_charge;
                 // dump($sum);
-
+                
                 $data = [
                     'past_charges' => $sum,
                     'current_charge' => $current_charge,
                 ];
+
 
                 $actual_book->past_charges = $sum;
                 $actual_book->updated_at = Carbon::now()->addDays(20);
@@ -131,7 +136,7 @@ class CartController extends Controller
 
                 // $allData[$book->id] = $data;
             } else {
-                dump('outside book_exist');
+                // dump('outside book_exist');
                 $data = [
                     'past_charges' => $d,
                     'current_charge' => $book->price,
@@ -154,3 +159,4 @@ class CartController extends Controller
         $book->push();
     }
 }
+

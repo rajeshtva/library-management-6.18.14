@@ -12,19 +12,6 @@ class CartFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function storeBooks()
-    {
-        for ($i = 0; $i < 20; $i++) {
-            $data = [
-                'book_name' => $this->faker->realText($maxNbChars = 30, $indexSize = 4),
-                'author_name' => $this->faker->name,
-                'description' => $this->faker->paragraph($nbSentence = 10, $variableNbSentence = true),
-                'price' => $this->faker->randomFloat(3, 0, 1000)
-            ];
-
-            $this->actingAs($this->admin)->post(route('books.store'), $data);
-        }
-    }
 
     /** @test */
     public function a_student_can_add_a_book_to_the_cart()
@@ -71,7 +58,7 @@ class CartFeatureTest extends TestCase
 
         $db_count = DB::table('book_user')->count();
         // dump(DB::table('book_user')->get());
-        
+
         $this->assertEquals($db_count, count(array_unique($cartArray)));
     }
 
@@ -88,14 +75,13 @@ class CartFeatureTest extends TestCase
 
         $this->actingAs($this->student)->post('/checkout')->assertStatus(302);
         $book = $user->hasRented->find(4)->pivot;
-        $this->assertEquals($book->past_charges, 2*$book->current_charge);
+        $this->assertEquals($book->past_charges, 2 * $book->current_charge);
         $book = $user->hasRented->find(13)->pivot;
         $this->assertEquals($book->past_charges, $book->current_charge);
         $this->assertDatabaseHas('book_user', ['user_id' => $this->student->id]);
         $db_count = DB::table('book_user')->count();
-        dump(DB::table('book_user')->get());
+        // dump(DB::table('book_user')->get()); //this was error where because
         $this->assertEquals($db_count, count($totalArray));
-
     }
 
     /** @test */
@@ -118,59 +104,58 @@ class CartFeatureTest extends TestCase
         // dump($this->student->id);
         // dump($user->getRoleNames());
 
-        foreach($cart as $item)
-        {
+        foreach ($cart as $item) {
             $this->assertDatabaseHas('book_user', [
-                ['book_id', '=', (string)$item],
-                ['user_id', '=',  (string)$this->student->id], 
+                ['book_id', '=', (string) $item],
+                ['user_id', '=',  (string) $this->student->id],
             ]);
         }
 
         // dump(Book::all());
         $deletedCart = [8, 1, 5, 10];
         // $id = $this->student->id;
-        foreach($deletedCart as $item)
-        {
-            $url = '/'.$this->student->id.'/softdelete/'.$item;
+        foreach ($deletedCart as $item) {
+            $url = '/' . $this->student->id . '/softdelete/' . $item;
             $this->delete($url)->assertStatus(200);
         }
 
         // dump(DB::table('book_user')->get());
 
         $allItems = DB::table('book_user')->where([
-            ['user_id', '=', $this->student->id ],
+            ['user_id', '=', $this->student->id],
         ])->get();
         // dump($allItems);
 
-    
+
         $this->assertEquals(count($allItems), 7);
 
         $deleted = 0;
         $subscribed = 0;
-        foreach($allItems as $item){
-            if($item->deleted_at != null )
-            {
-                $deleted ++;
-            }
-            else
-            {
+        foreach ($allItems as $item) {
+            if ($item->deleted_at != null) {
+                $deleted++;
+            } else {
                 $subscribed++;
             }
         }
 
         $this->assertEquals($deleted, 4);
         $this->assertEquals($subscribed, 3);
-    }   
-
-    /** @test */
-    // public function a_student_can_resubscribe_the_book()
-    // {
-    //     $this->an_item_from_store_can_be_soft_deleted();
-
-    //     $cartUpdated = [8, 5];
-
-    // }
-    
+    }
 
 
+
+    protected function storeBooks()
+    {
+        for ($i = 0; $i < 20; $i++) {
+            $data = [
+                'book_name' => $this->faker->realText($maxNbChars = 30, $indexSize = 4),
+                'author_name' => $this->faker->name,
+                'description' => $this->faker->paragraph($nbSentence = 10, $variableNbSentence = true),
+                'price' => $this->faker->randomFloat(3, 0, 1000)
+            ];
+
+            $this->actingAs($this->admin)->post(route('books.store'), $data);
+        }
+    }
 }
