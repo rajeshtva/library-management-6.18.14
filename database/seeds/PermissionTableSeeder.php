@@ -1,0 +1,20 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+
+class PermissionTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Permission::create(['name' => 'add_books']);
+        Permission::create(['name' => 'show_books']);
+        Permission::create(['name' => 'edit_books']);
+        Permission::create(['name' => 'delete_books']);
+    }
+}
