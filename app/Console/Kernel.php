@@ -25,10 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $allData =  DB::table('book_user')->get();
-            dump('hello i am working, dude!');
-        })->everyMinute();
+        $schedule->command('every:week')->everyMinute();
     }
 
     /**
