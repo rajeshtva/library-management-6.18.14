@@ -67,7 +67,7 @@ class RunTaskEveryMinute extends Command
             $arrayed_value = json_decode(json_encode($value));
             $id = $arrayed_value->user_id;
 
-            $books = DB::table('book_user')->where([
+            $books = DB::table('book_user')->where([ 
                 ['user_id', '=', $id],
             ])->get()->toArray();
 

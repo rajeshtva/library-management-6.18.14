@@ -4,11 +4,13 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Book extends Model
 {
     use LogsActivity;
+    use SoftDeletes;
     protected $guarded = [];
 
     // this is for fields about which things will be reported.

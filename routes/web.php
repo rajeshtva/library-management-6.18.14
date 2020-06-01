@@ -25,13 +25,24 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+// users routes 
+Route::get('/users/trashed', 'UserController@forceDeletePage');
+Route::post('/users/{user}/restore', 'UserController@restore');
+Route::post('/users/{user}/force-delete','UserController@forceDelete');
 Route::resource('users', 'UserController');
 
 Route::resource('roles', 'RoleController');
 
 Route::resource('permissions', 'PermissionController');
 
+
+// books route
+Route::get('/books/trashed', 'BookController@forceDeletePage');
+Route::post('/books/{book}/restore', 'BookController@restore');
+Route::post('/books/{book}/force-delete','BookController@forceDelete');
 Route::resource('books', 'BookController');
+
 
 Route::get('/admin/dashboard', 'UserController@index');
 

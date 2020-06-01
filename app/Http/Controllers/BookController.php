@@ -115,9 +115,10 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        return "destroy bookscontroller";
+        $book->delete();
+        return redirect(route('books.index'));
         //
     }
 
@@ -126,4 +127,28 @@ class BookController extends Controller
         $books = $user->hasRented->where('deleted_at', '!=', null);
         return view('admin.books.subscription', compact('books'));
     }
+
+    public function forceDelete($id)
+    {
+        $book = Book::withTrashed()->find($id);
+        $book->forceDelete();
+        return redirect(route('books.index'));
+    }
+
+    public function restore($id)
+    {
+        $book = Book::withTrashed()->find($id);
+        $book->restore();
+        return redirect(route('books.index'));
+    }
+
+    public function forceDeletePage()
+    {
+        $books = Book::onlyTrashed()->get();
+        // dump($books);
+
+        return view('admin.books.forceDeletePage', compact('books'));
+    }
+
+
 }

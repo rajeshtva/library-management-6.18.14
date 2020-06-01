@@ -106,6 +106,60 @@ class BookFeatureTest extends TestCase
 		$this->actingAs($this->student)->get('/home')->assertStatus(200)->assertSee(htmlentities($books, ENT_QUOTES));
 	}
 
+	/** @test */
+	public function an_admin_can_delete_a_book()
+	{
+		$data = [
+			'book_name' => $this->faker->realText($maxNbChars = 30, $indexSize= 4),
+			'author_name' => $this->faker->name,
+			'description' => $this->faker->paragraph($nbSentence = 10, $variableNbSentence = true),
+			'price' => $this->faker->randomFloat(3, 0, 1000)
+		];
+
+		$this->actingAs($this->admin)->post(route('books.store'), $data);
+		$books = Book::find(1);
+		// dump($books->id);
+
+		$this->actingAs($this->admin)->delete(route('books.destroy', $books->id))->assertStatus(302);
+		$books = Book::find(1);
+		$this->assertEmpty($books);
+	}
+
+	/** @test */
+	public function force_delete_page_has_books_data()
+	{
+		$this->withoutExceptionHandling();
+
+		for ($i=0; $i < 10; $i++) { 
+			$data = [
+				'book_name' => $this->faker->realText($maxNbChars = 30, $indexSize= 4),
+				'author_name' => $this->faker->name,
+				'description' => $this->faker->paragraph($nbSentence = 10, $variableNbSentence = true),
+				'price' => $this->faker->randomFloat(3, 0, 1000)
+			];
+			$this->actingAs($this->admin)->post(route('books.store'), $data);			
+		}
+
+		$deletedBooks = [3, 2, 1, 8, 4];
+
+		foreach($deletedBooks as $book){
+			$this->actingAs($this->admin)->delete(route('books.destroy', $book));
+		}
+
+		$books = Book::onlyTrashed()->get();
+		// dump($books);
+		$this->actingAs($this->admin)->get('/books/trashed')->assertStatus(200)->assertSee(htmlentities($books, ENT_QUOTES));
+
+		$bookToRestore = [8, 3];
+
+		foreach ($bookToRestore as $id) {
+			$book = Book::onlyTrashed()->find($id);
+			$book->restore();
+		}
+
+		$this->assertEquals(Book::count(), 7);
+	}
+
 	
 
 }

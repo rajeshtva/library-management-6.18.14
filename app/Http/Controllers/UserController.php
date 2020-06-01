@@ -144,4 +144,26 @@ class UserController extends Controller {
             ->with('flash_message',
              'User successfully deleted.');
     }
+
+    public function forceDelete($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->forceDelete();
+        return redirect(route('users.index'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->restore();
+        return redirect(route('users.index'));
+    }
+
+    public function forceDeletePage()
+    {
+        $users = User::onlyTrashed()->get();
+        // dump($users);
+
+        return view('admin.users.forceDeletePage', compact('users'));
+    }
 }
