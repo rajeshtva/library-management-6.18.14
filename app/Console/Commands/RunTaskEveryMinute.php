@@ -61,11 +61,6 @@ class RunTaskEveryMinute extends Command
 
 
         $users = DB::table('book_user')->select('user_id')->distinct()->get()->toArray();
-        // dump($users);
-
-        // foreach($users as $key => $value){
-        //     $users[$key] = $value->toArray();
-        // }
 
         foreach ($users as $key => $value) {
 

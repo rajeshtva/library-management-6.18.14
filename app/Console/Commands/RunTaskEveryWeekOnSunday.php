@@ -59,21 +59,31 @@ class RunTaskEveryWeekOnSunday extends Command
             ]);
         }
 
-        $users = DB::table('book_user')->select('user_id')->distinct()->get();
+        $users = DB::table('book_user')->select('user_id')->distinct()->get()->toArray();
 
-        foreach ($users as $user) {
+        foreach ($users as $key => $value) {
+
+            $arrayed_value = json_decode(json_encode($value));
+            $id = $arrayed_value->user_id;
+
             $books = DB::table('book_user')->where([
-                ['user_id', '=', $user],
-            ]);
+                ['user_id', '=', $id],
+            ])->get()->toArray();
+
+            $books = json_decode(json_encode($books));
+            // dd($books);
 
             $sum = 0;
 
-            foreach($books as $book){
-                $charge = $books->past_charges;
+            foreach ($books as $book) {
+                $book = json_decode(json_encode($book), true);
+
+                // dd($book);
+                $charge = $book['past_charges'];
                 $sum = $sum + $charge;
             }
 
-            User::find($user)->update([
+            User::find($id)->update([
                 'account' => $sum,
             ]);
         }
