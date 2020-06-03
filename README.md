@@ -17,22 +17,30 @@ This will automatically schedule calculating the weekly price for every user and
     git@github.com:je-rajesh/library-management-6.18.14.git
 
 * run `composer install` command
+```
     composer install 
+```
 this will install all the required packages to the project.
 
 * run `npm install` command
+```
     npm install 
+```
 this will install all the node dependencies in the project.
 
 * copy the .env.example to the .env by running 
+```
     cp .env.example .env
+```
 add all needed configurations to the .env file. this file keeps all the laravel configurations.
 
 * install authentication package of laravel 6
- 
+```
     composer require laravel/ui --dev
     php artisan ui vue --auth
 
+```
 * populate the database by 
-
+```
     php artisan db:seed
+```
