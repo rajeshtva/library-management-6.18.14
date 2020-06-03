@@ -14,8 +14,9 @@ This will automatically schedule calculating the weekly price for every user and
 
 ## How to set up this project
 * first git clone this project. 
+```
     git@github.com:je-rajesh/library-management-6.18.14.git
-
+```
 * run `composer install` command
 ```
     composer install 
