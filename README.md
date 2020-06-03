@@ -38,7 +38,6 @@ add all needed configurations to the .env file. this file keeps all the laravel 
 ```
     composer require laravel/ui --dev
     php artisan ui vue --auth
-
 ```
 * populate the database by 
 ```
