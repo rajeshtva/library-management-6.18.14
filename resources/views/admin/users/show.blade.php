@@ -1,4 +1,3 @@
-{{-- \resources\views\users\index.blade.php --}}
 @extends('admin.layouts.app')
 
 @section('title', 'Borrowed books')
@@ -8,13 +7,6 @@
 @section('name') {{ $user->name }} @endsection 
 
     <table class="table">
-        <!-- <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Account</th>
-            <th>Total Books</th>
-        </tr> -->
-
         <tr>
             <td><h3>{{ $user->name }}</h3></td>
             <td><h3>{{ $user->email }}</h3></td>
@@ -30,7 +22,7 @@
                 <tr>
                     <th>Book ID</th>
                     <th>Book Name</th>
-                    <th>Created At</th>
+                    <th>Subscribed At</th>
                     <th>Past Charges</th>
                     <th>current Charge</th>
 

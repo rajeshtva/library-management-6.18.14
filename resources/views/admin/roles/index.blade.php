@@ -6,7 +6,8 @@
 
 <div class="col-lg-10 col-lg-offset-1">
 
-    <div class="table-responsive">
+@section('name') Role @endsection
+     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>

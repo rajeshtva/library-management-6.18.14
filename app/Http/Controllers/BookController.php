@@ -147,13 +147,17 @@ class BookController extends Controller
     {
         $book = Book::withTrashed()->find($id);
         $book->restore();
-        return redirect(route('books.index'));
+        return redirect('/books/trashed');
     }
  
     public function forceDeletePage()
     {
         $books = Book::onlyTrashed()->get();
-        // dump($books);
+        // dd($books);
+        foreach($books as $book){
+            $book->subscribers = DB::table('book_user')->where('book_id', $book->id)->count();
+            $book->total_charge = DB::table('book_user')->where('book_id', $book->id)->sum('past_charges');
+        }
 
 
         return view('admin.books.forceDeletePage', compact('books'));
@@ -162,9 +166,6 @@ class BookController extends Controller
     public function unsubscribe()
     {
         $book_id = request()->input('book_id');
-        // dd($book_id);
-        // $delete = [ 'updated_at' => Carbon::now() ];
-
 
         DB::table('book_user')->where([
             ['user_id', '=', auth()->user()->id],

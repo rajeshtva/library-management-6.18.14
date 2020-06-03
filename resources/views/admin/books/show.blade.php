@@ -24,7 +24,7 @@
   </div>
   <div class="row ">
     <div> <strong> Description: </strong> </div>
-    <div class="ml-3"> {{ $book->description }}</div>
+    <div class="ml-3" style="font-size: 1rem"> {{ $book->description }}</div>
   </div>
 
   @endsection

@@ -1,13 +1,12 @@
-{{-- \resources\views\users\index.blade.php --}}
-
-@section('title', '| Users')
-
 @extends('admin.layouts.app')
 
 @section('admin-content')
+@section('button ')
+<a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
+@endsection
 <div class="table-responsive">
-@section('name') Force-delete User @endsection 
-    <table class="table table-striped table-hover">
+    @section('name') Force-delete User @endsection
+    <table class="table table-striped">
 
         <thead>
             <tr>
@@ -31,15 +30,19 @@
                 <td>{{ $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
                 <td>{{ $user->account }}</td>
                 <td class="d-flex ">
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary pull-left" style="margin-right: 1rem;">Edit</a>
+                    <a href="{{ route('users.edit', $user->id) }}">
+                        <button class="btn btn-primary float-left">Edit</button>
+                    </a>
 
                     <form action="/users/{{ $user->id }}/force-delete" method="POST">
-                        @csrf 
+                        @csrf
                         @method('DELETE')
-                        <input type="submit" value="Force Delete" class="btn btn-danger">
+                        <input type="submit" value="Force Delete" class="btn btn-danger mx-1">
                     </form>
-                    <a href="/users/{{ $user->id }}"><button class="btn btn-info ml-3 ">Go to user page </button></a>
-
+                    <form action="/users/{{ $user->id }}/restore" method="POST">
+                        @csrf
+                        <input type="submit" value="restore" class="btn btn-warning">
+                    </form>
                 </td>
             </tr>
             @endforeach
@@ -48,7 +51,6 @@
     </table>
 </div>
 
-<a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
 
 </div>
 

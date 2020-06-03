@@ -185,7 +185,7 @@ class UserController extends Controller
     {
         $user = User::withTrashed()->find($id);
         $user->restore();
-        return redirect(route('users.index'));
+        return redirect('/users/trashed');
     }
 
     public function forceDeletePage()

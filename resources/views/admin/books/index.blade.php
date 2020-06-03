@@ -6,6 +6,9 @@
 @section('name') All Books @endsection
 
 <div class="container">
+  @section('button') <a href="{{ route('books.create')}}">
+    <button class="btn btn-primary">create book</button>
+  </a> @endsection
   <div class="row justify-content-center">
     <div class="col-md-12">
       <table class=table>
@@ -26,19 +29,15 @@
           <td>{{ $book->rented_by ?? ''}}</td>
           <td>
             <div class="d-flex">
-            <a href="/books/{{ $book->id }}"> <button class="btn btn-primary mr-3" >Detail</button></a>
-            <div class="d-flex">
-              <form action="/books/{{$book->id}}" method="POST" class="form-inline">
-                @csrf
-                @method('EDIT')
-                <input type="submit" value="edit" class="btn btn-info mr-3">
-              </form>
-              <form action="/books/{{$book->id}}" method="POST" class="form-inline">
-                @csrf
-                @method('DELETE')
-                <input type="submit" value="Delete" class="btn btn-danger">
-              </form>
-            </div>
+              <a href="/books/{{ $book->id }}"> <button class="btn btn-primary mr-3">Detail</button></a>
+              <div class="d-flex">
+                <a href="/books/{{$book->id}}/edit"><button value="submit" class="btn btn-primary mr-3">edit</button></a>
+                <form action="/books/{{$book->id}}" method="POST" class="form-inline">
+                  @csrf
+                  @method('DELETE')
+                  <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+              </div>
           </td>
         </tr>
 
