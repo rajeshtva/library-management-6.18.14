@@ -1,11 +1,12 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
-@section('title', '| Edit Permission')
+@section('title', '| Add User')
 
-@section('content')
+@section('admin-content')
+
 
 <div class='col-lg-4 col-lg-offset-4'>
-    {{ $book }}
+@section('name') Edit {{ $book->book_name }} @endsection 
 
 </div>
 

@@ -1,24 +1,24 @@
 {{-- \resources\views\users\index.blade.php --}}
-@extends('layouts.app')
 
 @section('title', '| Users')
 
-@section('content')
+@extends('admin.layouts.app')
 
-<div class="col-lg-10 col-lg-offset-1">
-    <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}" class="btn btn-default pull-right">Roles</a>
-    <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h1>
-    <hr>
+@section('admin-content')
+
+@section('name') All Users @endsection 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table class="table table-striped table-hover">
 
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Date/Time Added</th>
-                    <th>User Roles</th>
+                    <th>Roles</th>
+                    <th>Charge</th>
                     <th>Operations</th>
+
                 </tr>
             </thead>
 
@@ -29,13 +29,15 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
-                    <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
-                    <td class= "d-flex ">
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin-right: 1rem;">Edit</a>
+                    <td>{{ $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
+                    <td>{{ $user->account }}</td>
+                    <td class="d-flex ">
+                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary pull-left" style="margin-right: 1rem;">Edit</a>
 
-                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                    {!! Form::close() !!}
+                        {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!}
+                        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                        {!! Form::close() !!}
+                    <a href="/users/{{ $user->id }}"><button class="btn btn-info ml-3 ">Go to user page </button></a>
 
                     </td>
                 </tr>
@@ -48,5 +50,6 @@
     <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
 
 </div>
+
 
 @endsection

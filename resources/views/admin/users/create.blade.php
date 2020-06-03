@@ -1,15 +1,12 @@
 {{-- \resources\views\users\create.blade.php --}}
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', '| Add User')
 
-@section('content')
+@section('admin-content')
 
+@section('name') Add User @endsection
 <div class='col-lg-4 col-lg-offset-4'>
-
-    <h1><i class='fa fa-user-plus'></i> Add User</h1>
-    <hr>
-
     {{ Form::open(array('url' => 'users')) }}
 
     <div class="form-group">
@@ -24,8 +21,8 @@
 
     <div class='form-group'>
         @foreach ($roles as $role)
-            {{ Form::checkbox('roles[]',  $role->id ) }}
-            {{ Form::label($role->name, ucfirst($role->name)) }}<br>
+        {{ Form::checkbox('roles[]',  $role->id ) }}
+        {{ Form::label($role->name, ucfirst($role->name)) }}<br>
 
         @endforeach
     </div>

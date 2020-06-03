@@ -1,10 +1,12 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
+@section('title', '| Add User')
 
-@section('content')
+@section('admin-content')
+
 
 <div class='col-lg-4 col-lg-offset-4'>
-    {{ $books }}
+@section('name') Force-delete Book @endsection 
 
 </div>
 

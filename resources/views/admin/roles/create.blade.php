@@ -1,13 +1,11 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
-@section('title', '| Add Role')
+@section('title', '| Add User')
 
-@section('content')
+@section('admin-content')
 
 <div class='col-lg-4 col-lg-offset-4'>
-
-    <h1><i class='fa fa-key'></i> Add Role</h1>
-    <hr>
+@section('name') Add Role @endsection 
 
     {{ Form::open(array('url' => 'roles')) }}
 

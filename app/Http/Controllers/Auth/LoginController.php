@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -28,15 +29,12 @@ class LoginController extends Controller
      *
      * @var string
      */
-    
+
     protected function  authenticated()
     {
-        if(auth()->user()->hasRole('Admin'))
-        {
+        if (auth()->user()->hasRole('admin')) {
             return redirect('/admin/dashboard');
-        }
-        else 
-        {
+        } else {
             return redirect('/home');
         }
     }
@@ -44,7 +42,7 @@ class LoginController extends Controller
 
     // protected $redirectTo = '/';
     protected $redirectTo = RouteServiceProvider::HOME;
-    
+
     /**
      * Create a new controller instance.
      *
@@ -53,6 +51,27 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
+
+        $cart = session()->get('cart');
+        if (empty($cart)) {
+            $cart = array();
+            session()->put('cart', $cart);
+            // dump($cart);
+        }
     }
-    
+    /**
+     * @TODO: here i have to implement if a user needs to be authenticated then it must go to desired page directly. if nothing then it must go to home page of their respective users. 
+     */
+
+    // public function showLoginForm()
+    // {
+    //     session(['link' => url()->previous()]);
+    //     return view('auth.login');
+    // }
+
+    // protected function authenticated(Request $request, $user)
+    // {
+    //     return redirect(session('link'));
+    // }
 }

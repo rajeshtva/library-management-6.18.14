@@ -52,8 +52,10 @@ class CartController extends Controller
     {
         $cart = session()->get('cart');
         $books = array();
+
         foreach ($cart as $item) {
             $book = Book::findOrFail($item);
+            $book->description = substr($book->description, 0, 80).'...';
             array_push($books, $book);
         }
         return view('students.cart', compact('books'));
@@ -72,7 +74,8 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return redirect('/home')->with('message', 'Book Removed!');
+        // return redirect('/carts')->with('message', 'Book Removed!');
+        return back()->with('message', 'Book Removed!');    
     }
 
     public function checkOut()

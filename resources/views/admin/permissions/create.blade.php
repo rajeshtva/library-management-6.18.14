@@ -1,13 +1,11 @@
-{{-- \resources\views\permissions\create.blade.php --}}
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
-@section('title', '| Create Permission')
+@section('admin-content')
 
-@section('content')
 
 <div class='col-lg-4 col-lg-offset-4'>
 
-    <h1><i class='fa fa-key'></i> Add Permission</h1>
+    <h1><i class='fa fa-key'></i> @section('name') Add Permission @endsection</h1>
     <br>
 
     {{ Form::open(array('url' => 'permissions')) }}
@@ -17,13 +15,13 @@
         {{ Form::text('name', '', array('class' => 'form-control')) }}
     </div><br>
     @if(!$roles->isEmpty()) //If no roles exist yet
-        <h4>Assign Permission to Roles</h4>
+    <h4>Assign Permission to Roles</h4>
 
-        @foreach ($roles as $role) 
-            {{ Form::checkbox('roles[]',  $role->id ) }}
-            {{ Form::label($role->name, ucfirst($role->name)) }}<br>
+    @foreach ($roles as $role)
+    {{ Form::checkbox('roles[]',  $role->id ) }}
+    {{ Form::label($role->name, ucfirst($role->name)) }}<br>
 
-        @endforeach
+    @endforeach
     @endif
     <br>
     {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}

@@ -40,6 +40,12 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $cart = session()->get('cart');
+        if (empty($cart)) {
+            $cart = array();
+            session()->put('cart', $cart);
+            // dump($cart);
+        }
     }
 
     /**

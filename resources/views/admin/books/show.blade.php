@@ -1,39 +1,30 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
+
+@section('title', '| Add User')
+
+@section('admin-content')
 
 
-@section('content')
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-10">
-      <div class="card">
-        <div class="card-header d-flex align-items-center ">
-          <div class="display-4 mr-5">{{ $book->book_name }}</div>
-          <form action="/cart/{{ $book->id }}/add" method="POST">
-            <button class="btn btn-primary">Add to cart</button>
-          </form>
-        </div>
-        
-        <div class="card-body">
-            <table class="table table-borderless">
-            <tr>
-                <td> <h1 style="font:1.5rem; color:grey;">Author</h1></td>
-                <td> <h1 style="font-size:2rem">{{ $book->author_name }}</span></td>
-            </tr>
-            <tr>
-                <td><h1 style="font:1.5rem; color:grey;">Description<h1></td>
-                <td>  <span style="font-size:2rem">{{ $book->description }}</span></td>
-            </tr>
-            <tr>
-                <td> <h1 style="font:1.5rem; color:grey;">Price</h1></td>
-                <td><span style="font-size:2rem">{{ $book->price }}</span></td>
-            </tr>
-            </table>
-          
-        </div>
-      </div>
+<div class="container" style="font-size: 1.5rem">
+  @section('name') Book : {{ $book->id }} @endsection
+  <div class="row justify-content-between d-flex align-items-between">
+    <div class="mr-3 mb-0">
+      <h3 class="mb-0">{{ $book->book_name }}</h3>
     </div>
+    <form action="/carts/store" method="POST">
+    @csrf
+      <input type="hidden" name="book_id" value="{{ $book->id }}">
+      <input type="submit" value="Add To Cart" class="btn btn-primary">
+    </form>
   </div>
-</div>
 
-@endsection
+  <div class="row justify-content-between  d-flex">
+    <div> <strong> Author: </strong> </div>
+    <div> {{ $book->author_name }}</div>
+  </div>
+  <div class="row ">
+    <div> <strong> Description: </strong> </div>
+    <div class="ml-3"> {{ $book->description }}</div>
+  </div>
+
+  @endsection

@@ -11,8 +11,7 @@
 |
 // */
 
-
-
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 // this was added by me just to remove not found classes. 😉 
@@ -27,9 +26,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 // users routes 
-Route::get('/users/trashed', 'UserController@forceDeletePage');
-Route::post('/users/{user}/restore', 'UserController@restore');
-Route::post('/users/{user}/force-delete','UserController@forceDelete');
+Route::get('/users/trashed', 'UserController@forceDeletePage')->middleware('isAdmin');
+Route::post('/users/{user}/restore', 'UserController@restore')->middleware('isAdmin');
+Route::delete('/users/{user}/force-delete','UserController@forceDelete')->middleware('isAdmin');
 Route::resource('users', 'UserController');
 
 Route::resource('roles', 'RoleController');
@@ -38,13 +37,14 @@ Route::resource('permissions', 'PermissionController');
 
 
 // books route
-Route::get('/books/trashed', 'BookController@forceDeletePage');
-Route::post('/books/{book}/restore', 'BookController@restore');
-Route::post('/books/{book}/force-delete','BookController@forceDelete');
+Route::post('/books/unsubscribe', 'BookController@unsubscribe');
+Route::get('/books/trashed', 'BookController@forceDeletePage')->middleware('isAdmin');
+Route::post('/books/{book}/restore', 'BookController@restore')->middleware('isAdmin');
+Route::post('/books/{book}/force-delete','BookController@forceDelete')->middleware('isAdmin');
 Route::resource('books', 'BookController');
 
 
-Route::get('/admin/dashboard', 'UserController@index');
+Route::get('/admin/dashboard', 'UserController@index')->middleware('isAdmin');
 
 Route::post('/carts/store', 'CartController@store');
 Route::get('/carts', 'CartController@index');

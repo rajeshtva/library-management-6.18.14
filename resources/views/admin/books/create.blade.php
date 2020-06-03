@@ -1,8 +1,10 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
+@section('title', '| Add User')
 
-@section('content')
+@section('admin-content')
 
+@section('name') Create Book @endsection 
 <div class="container">
   <div class="row justify-content-center">  
     <div class="col-md-8">

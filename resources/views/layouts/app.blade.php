@@ -26,7 +26,13 @@
 		<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
 			<div class="container">
 				<a class="navbar-brand" href="{{ url('/') }}">
-					{{ config('app.name', 'Laravel') }}
+					@if(auth()->user() == null )
+					Library Management System
+					@elseif(auth()->user()->hasRole('admin'))
+					Administrator
+					@else
+					Student
+					@endif
 				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
 					<span class="navbar-toggler-icon"></span>
@@ -58,7 +64,7 @@
 
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								@role('Admin') {{-- Laravel-permission blade helper --}}
-									<a href="/admin/dashboard"><i class="fa fa-btn fa-unlock"></i>Admin</a>
+								<a href="/admin/dashboard"><i class="fa fa-btn fa-unlock"></i>Admin</a>
 								@endrole
 								<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -77,12 +83,12 @@
 		</nav>
 
 		@if(Session::has('flash_message'))
-            <div class="container">      
-                <div class="alert alert-success"><em> {!! session('flash_message') !!}</em>
-                </div>
-            </div>
-		@endif 
-		
+		<div class="container">
+			<div class="alert alert-success"><em> {!! session('flash_message') !!}</em>
+			</div>
+		</div>
+		@endif
+
 
 
 		<main class="py-4 d-flex justify-content-center">
