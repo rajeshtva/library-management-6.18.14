@@ -29,9 +29,10 @@ this will install all the node dependencies in the project.
 add all needed configurations to the .env file. this file keeps all the laravel configurations.
 
 * install authentication package of laravel 6
+ 
     composer require laravel/ui --dev
-
     php artisan ui vue --auth
 
 * populate the database by 
+
     php artisan db:seed
