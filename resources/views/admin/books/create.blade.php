@@ -4,15 +4,15 @@
 
 @section('admin-content')
 
-@section('name') Create Book @endsection 
+@section('name') Create Book @endsection
 <div class="container">
-  <div class="row justify-content-center">  
+  <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">{{ __('Register') }}</div>
 
         <div class="card-body">
-          <form method="POST" action="/books">
+          <form method="POST" action="/books" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group row">
@@ -71,12 +71,40 @@
                 @enderror
               </div>
             </div>
+            <!-- image for book -->
+            <div class="form-group row">
+              <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+
+              <div class="col-md-6">
+                <input id="image" type="file" class="form-control @error('password') is-invalid @enderror" name="image" required autocomplete="image">
+
+                @error('image')
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+              </div>
+            </div>
+            <!-- file for book -->
+            <div class="form-group row">
+              <label for="file" class="col-md-4 col-form-label text-md-right">file</label>
+
+              <div class="col-md-6">
+                <input id="file" type="file" class="form-control @error('password') is-invalid @enderror" name="file" required autocomplete="file" >
+
+                @error('file')
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+              </div>
+            </div>
 
 
             <div class="form-group row mb-0">
               <div class="col-md-6 offset-md-4">
                 <button type="submit" class="btn btn-primary">
-                  {{ __('Register') }}
+                  Add 
                 </button>
               </div>
             </div>

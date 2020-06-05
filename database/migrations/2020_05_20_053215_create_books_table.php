@@ -20,6 +20,8 @@ class CreateBooksTable extends Migration
             $table->text('description');
             $table->float('price');
             $table->unsignedBigInteger('user_id');
+            $table->string('file')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
 
             $table->index('user_id');
