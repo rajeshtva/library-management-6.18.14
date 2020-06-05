@@ -97,4 +97,12 @@
 	</div>
 </body>
 
+
+<footer style="height:10vw">
+	<div class="d-flex justify-content-center">
+	&copy;2020 rajesh kumar : rajesh.rxca@gmail.com
+
+	</div>
+</footer>
+
 </html>
