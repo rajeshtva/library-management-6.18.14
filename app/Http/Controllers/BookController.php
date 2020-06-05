@@ -27,9 +27,8 @@ class BookController extends Controller
     {
         $books = Book::all();
 
-        foreach($books as $book)
-        {
-            $book->description = substr($book->description, 0, 80).'...';
+        foreach ($books as $book) {
+            $book->description = substr($book->description, 0, 80) . '...';
             $book->rented_by = DB::table('book_user')->where('book_id', $book->id)->count();
         }
         return view('admin.books.index', [
@@ -55,22 +54,19 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'book_name' => 'required|string',
-            'author_name' => 'required|string',
-            'description' => 'required',
-            'price' => 'numeric|min:0'
-        ]);
+        $data = $this->validateRequest();
 
+        $data['image'] = request()->image->store('images', 'public');
+
+        $data['file'] = request()->file->store('books', 'public');
+        
         // $data = array_merge($data, [
         //     'added_by' => auth()->user()->id,
         // ]); 
-        $data['price'] = (float)$data['price'];
+        $data['price'] = (float) $data['price'];
 
         auth()->user()->books()->create($data);
         return redirect('/books');
-
-        
     }
 
     /**
@@ -93,27 +89,27 @@ class BookController extends Controller
     public function edit(Book $book)
     {
         return view('admin.books.edit', compact('book'));
-    
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $book
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Book $book)
     {
-       $data =  $this->validate($request,  [
-            'book_name' => 'required|string',
-            'author_name' => 'required|string',
-            'description' => 'required',
-            'price' => 'numeric|min:0'
-        ] );
-    
+        $data =  $this->validateRequest();
+        $book->update([
+            'book_name' => $data['book_name'],
+            'price' => $data['price'],
+            'description' => $data['description'],
+            'author_name' => $data['author_name'],
+        ]);
 
-        $book->update($data);
+        $this->storeFile($book);
+        $this->storeImage($book);
         return redirect(route('books.edit', $book->id));
     }
 
@@ -149,12 +145,12 @@ class BookController extends Controller
         $book->restore();
         return redirect('/books/trashed');
     }
- 
+
     public function forceDeletePage()
     {
         $books = Book::onlyTrashed()->get();
         // dd($books);
-        foreach($books as $book){
+        foreach ($books as $book) {
             $book->subscribers = DB::table('book_user')->where('book_id', $book->id)->count();
             $book->total_charge = DB::table('book_user')->where('book_id', $book->id)->sum('past_charges');
         }
@@ -174,6 +170,45 @@ class BookController extends Controller
         return redirect('/home');
     }
 
+    private function validateRequest()
+    {
+        return tap(
+            request()->validate([
+                'book_name' => 'required|string',
+                'author_name' => 'required|string',
+                'description' => 'required',
+                'price' => 'numeric|min:0',
+                'file'=> 'file|mimes:pdf'
+            ]),
+            function () {
+                if (request()->hasFile('image')) {
+                    request()->validate([
+                        'image' => 'file|image|max:5000|mimes:jpg,jpeg,bmp,png',
+                    ]);
+                }
+            }
+        );
+    }
 
+    private function storeImage($book)
+    {
+        if (request()->has('image')) {
+            $book->update([
+                'image' => request()->image->store('images', 'public'),
+            ]);
+        }
 
+        return $book;
+    }
+
+    private function storeFile($book)
+    {
+        if (request()->has('file')) {
+            $book->update([
+                'file' => request()->file->store('books', 'public')
+            ]);
+        }
+
+        return $book;
+    }
 }
